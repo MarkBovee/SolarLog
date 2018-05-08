@@ -45,7 +45,7 @@ function renderPowerStats(data) {
     if (data.total_return) { $('#totalReturn').text(data.total_return) };
     if (data.total_gas) { $('#totalGas').text(data.total_gas) };
     if (data.sunrise && data.sunset) { $('#sunrise').html("&uarr;" + data.sunrise + " &darr;" + data.sunset) };
-    if (data.forecast && data.temp) { $('#weather').html(data.forecast + " " + data.temp + " &#8451;") };
+    if (data.forecast && data.temp) { $('#weather').html(data.forecast + " " + data.temp + "&#8451;") };
   }
 }
 

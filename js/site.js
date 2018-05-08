@@ -1,6 +1,7 @@
 $(window).on("load", function() {
   
   // load the initial data
+  setDate();
   getPowerStatsData();
   getPowerChartData(false);
 
@@ -11,6 +12,12 @@ $(window).on("load", function() {
 
   // refresh chart data every 5 minutes
   window.setInterval(function() {
+    setDate();
     getPowerChartData(true);
   }, 300000);
+
+  function setDate() {
+    $("#date").text(moment(new Date()).format('MM-DD-YYYY'));
+  }
+  
 });
