@@ -26,23 +26,8 @@ function rgb (r, g, b) {
   return value;
 }
 
-// renders a chart
-function renderChart(data, labels, caption, primary, secondary, element, update) {
-
-  var chartdata = {
-    labels: labels,
-    datasets: [
-      {
-        label: caption,
-        data: data,
-        pointRadius: 0,
-        borderColor: primary,
-        borderWidth: 2,
-        backgroundColor: secondary 
-      }
-    ]
-  };
-
+// renders a line chart
+function renderLineChart(caption, element, chartdata, update) {
   if (update) {
     // update the chart data
     var chart = charts[caption];
@@ -74,8 +59,49 @@ function renderChart(data, labels, caption, primary, secondary, element, update)
           yAxes: [
             {
               gridLines: {
-                display: false
+                display: true
               }
+            }
+          ]
+        }
+      }
+    };
+
+    var ctx = document.getElementById(element).getContext("2d");
+    charts[caption] = new Chart(ctx, options);
+  }
+}
+
+// renders a bar chart
+function renderBarChart(caption, element, chartdata, update) {
+  if (update) {
+    // update the chart data
+    var chart = charts[caption];
+    chart.config.options.animation.duration = 0;
+    chart.config.data = chartdata;
+    chart.update();
+  } else {
+    // draw new chart
+    var options = {
+      type: "bar",
+      data: chartdata,
+      options: {
+        legend: {
+          display: false
+        },
+        scales: {
+            xAxes: [
+              {
+                stacked: true,
+                gridLines: {
+                  display: false
+                }
+            }],
+            yAxes: [{
+                stacked: false,
+                ticks: {
+                    beginAtZero: true
+                }
             }
           ]
         }

@@ -20,5 +20,9 @@ var colors = {
     return : {
         primary: rgb(154, 237, 190),
         secondary: rgb(230, 247, 230)
+    },
+    gas : {
+        primary: rgb(244, 137, 66),
+        secondary: rgb(244, 216, 198)
     }
 };

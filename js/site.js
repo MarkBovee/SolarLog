@@ -2,18 +2,20 @@ $(window).on("load", function() {
   
   // load the initial data
   setDate();
-  getPowerStatsData();
-  getPowerChartData(false);
+  getStatsData();
+  getPowerDataCurrent(false);
+  getPowerDataLastWeek(false);
+  getGasDataLastWeek(false);
 
   // refresh chart data every 15 seconds
   window.setInterval(function() {
-    getPowerStatsData(true);
+    getStatsData(true);
   }, 15000);
 
   // refresh chart data every 5 minutes
   window.setInterval(function() {
     setDate();
-    getPowerChartData(true);
+    getPowerDataCurrent(true);
   }, 300000);
 
   function setDate() {

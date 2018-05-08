@@ -18,7 +18,8 @@
 
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/variables.js"></script>
-    <script type="text/javascript" src="js/power.js"></script>
+    <script type="text/javascript" src="js/stats.js"></script>
+    <script type="text/javascript" src="js/charts.js"></script>
     <script type="text/javascript" src="js/site.js"></script>
 
     <title></title>
@@ -28,7 +29,7 @@
 <body>
 
     <div id="container" class="container-fluid">
-        <!-- title row -->
+        <!-- title -->
         <div class="row">
             <div class="tile col-3">
                 <div>
@@ -46,6 +47,7 @@
                 </div>
             </div>
         </div>
+
         <!-- stats of today -->
         <div class="row">
             <div class="tile col-6 col-sm-4 col-md-2">
@@ -83,12 +85,23 @@
         <!-- power charts -->
         <div class="row">
             <div class="tile col-sm">
-                <h6>Production</h6>
-                <canvas id="powerchart_return"></canvas>
+                <h6>Today (power)</h6>
+                <canvas id="powerchart"></canvas>
             </div>
             <div class="tile col-sm">
-                <h6>Usage</h6>
-                <canvas id="powerchart_usage"></canvas>
+                
+            </div>
+        </div>
+
+        <!-- stat charts -->
+        <div class="row">
+            <div class="tile col-sm">
+                <h6>Last week (power)</h6>
+                <canvas id="power_lastweek"></canvas>
+            </div>
+            <div class="tile col-sm">
+                <h6>Last week (gas)</h6>
+                <canvas id="gas_lastweek"></canvas>
             </div>
         </div>
 
