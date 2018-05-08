@@ -4,7 +4,7 @@ function getPowerDataCurrent(update) {
     headers: {
       "Authorization": "Basic " + domoticz.auth
     },
-    url: "http://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + domoticz.devices.solar + "&range=day",
+    url: "https://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + domoticz.devices.solar + "&range=day",
     type: "GET",
     contentType: "application/json; charset=utf-8",
     success: function(json) {

@@ -1,7 +1,7 @@
 // Domoticz server settings
 var domoticz = { 
     server: "84.84.4.7",
-    port: "8080",
+    port: "443",
     auth: "c29sYXI6Qlc2S0ZBTjhjdmZidmFVNQ==",
     devices: {
         // The idx of smart meter devices
