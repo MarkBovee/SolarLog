@@ -1,0 +1,26 @@
+html {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode';
+    font-size: 80%;
+}
+
+body {
+    background-color: #ddd;
+}
+
+#container {
+    max-width: 1680px;
+}
+
+.tile {
+    background-color: #fff;
+    border: 3px solid #ddd;
+    border-radius: 3px;
+    text-align: center;
+    padding: 10px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    margin: 20px;
+  }
