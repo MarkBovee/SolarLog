@@ -7,7 +7,7 @@ var domoticz = {
         // The idx of smart meter devices
         solar: 6,
         gas: 8,
-        temp: 13
+        weather: 13
     }
 };
 

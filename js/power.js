@@ -23,7 +23,7 @@ function getPowerStatsData() {
     headers: {
       "Authorization": "Basic " + domoticz.auth
     },
-    url: "http://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=devices&filter=utility&used=true&order=[Order]&plan=0",
+    url: "http://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=devices&filter=all&favorite=1&used=true&order=[Order]&plan=0",
     type: "GET",
     contentType: "application/json; charset=utf-8",
     success: function(json) {
@@ -39,12 +39,13 @@ function getPowerStatsData() {
 // draw the most current solar value from the data
 function renderPowerStats(data) {
   if (data) {
-    $('#currentUsage').text(data.current_usage);
-    $('#currentReturn').text(data.current_return);
-    $('#totalUsage').text(data.total_usage);
-    $('#totalReturn').text(data.total_return);
-    $('#totalGas').text(data.total_gas);
-    $('#sunrise').html("&uarr;" + data.sunrise + " &darr;" + data.sunset);
+    if (data.current_usage) { $('#currentUsage').text(data.current_usage) };
+    if (data.total_usage) { $('#totalUsage').text(data.total_usage) };
+    if (data.current_return) { $('#currentReturn').text(data.current_return) };
+    if (data.total_return) { $('#totalReturn').text(data.total_return) };
+    if (data.total_gas) { $('#totalGas').text(data.total_gas) };
+    if (data.sunrise && data.sunset) { $('#sunrise').html("&uarr;" + data.sunrise + " &darr;" + data.sunset) };
+    if (data.forecast && data.temp) { $('#weather').html(data.forecast + " " + data.temp + " &#8451;") };
   }
 }
 
@@ -58,12 +59,16 @@ function renderPowerCharts(data, update) {
 function extractPowerStatsData(json) {
 
   function checkSolarDevice(result) {
-      return result.idx == domoticz.devices.solar;
+      return parseInt(result.idx) == domoticz.devices.solar;
   }
 
   function checkGasDevice(result) {
-    return result.idx == domoticz.devices.gas;
-}
+    return parseInt(result.idx) == domoticz.devices.gas;
+  }
+
+  function checkWeatherDevice(result) {
+    return parseInt(result.idx) == domoticz.devices.weather;
+  }
 
   var stats = {
     time: json.ServerTime,
@@ -84,99 +89,13 @@ function extractPowerStatsData(json) {
     stats.total_gas = gasdevice.CounterToday;
   }
 
-  return stats;
-  
-  /*
-  {
-   "ActTime" : 1525715734,
-   "ServerTime" : "2018-05-07 19:55:34",
-   "Sunrise" : "05:54",
-   "Sunset" : "21:12",
-   "result" : [
-      {
-         "AddjMulti" : 1.0,
-         "AddjMulti2" : 1.0,
-         "AddjValue" : 0.0,
-         "AddjValue2" : 0.0,
-         "BatteryLevel" : 255,
-         "Counter" : "1812.630",
-         "CounterDeliv" : "3305.128",
-         "CounterDelivToday" : "32.532 kWh",
-         "CounterToday" : "1.115 kWh",
-         "CustomImage" : 0,
-         "Data" : "970326;842304;988868;2316260;0;72",
-         "Description" : "",
-         "Favorite" : 1,
-         "HardwareID" : 3,
-         "HardwareName" : "Smart meter",
-         "HardwareType" : "P1 Smart Meter USB",
-         "HardwareTypeVal" : 4,
-         "HaveTimeout" : false,
-         "ID" : "1",
-         "LastUpdate" : "2018-05-07 19:55:33",
-         "Name" : "Power",
-         "Notifications" : "false",
-         "PlanID" : "0",
-         "PlanIDs" : [ 0 ],
-         "Protected" : false,
-         "ShowNotifications" : true,
-         "SignalLevel" : "-",
-         "SubType" : "Energy",
-         "SwitchTypeVal" : 0,
-         "Timers" : "false",
-         "Type" : "P1 Smart Meter",
-         "TypeImg" : "counter",
-         "Unit" : 1,
-         "Usage" : "0 Watt",
-         "UsageDeliv" : "72 Watt",
-         "Used" : 1,
-         "XOffset" : "0",
-         "YOffset" : "0",
-         "idx" : "6"
-      },
-      {
-         "AddjMulti" : 1.0,
-         "AddjMulti2" : 1.0,
-         "AddjValue" : 0.0,
-         "AddjValue2" : 0.0,
-         "BatteryLevel" : 255,
-         "Counter" : "959.485",
-         "CounterToday" : "0.290 m3",
-         "CustomImage" : 0,
-         "Data" : "959.485",
-         "Description" : "",
-         "Favorite" : 1,
-         "HardwareID" : 3,
-         "HardwareName" : "Smart meter",
-         "HardwareType" : "P1 Smart Meter USB",
-         "HardwareTypeVal" : 4,
-         "HaveTimeout" : false,
-         "ID" : "1",
-         "LastUpdate" : "2018-05-07 19:54:12",
-         "Name" : "Gas",
-         "Notifications" : "false",
-         "PlanID" : "0",
-         "PlanIDs" : [ 0 ],
-         "Protected" : false,
-         "ShowNotifications" : true,
-         "SignalLevel" : "-",
-         "SubType" : "Gas",
-         "SwitchTypeVal" : 1,
-         "Timers" : "false",
-         "Type" : "P1 Smart Meter",
-         "TypeImg" : "counter",
-         "Unit" : 2,
-         "Used" : 1,
-         "XOffset" : "0",
-         "YOffset" : "0",
-         "idx" : "8"
-      }
-   ],
-   "status" : "OK",
-   "title" : "Devices"
-}
+  var weatherdevice = json.result.find(checkWeatherDevice);
+  if (weatherdevice) {
+    stats.forecast = weatherdevice.ForecastStr;
+    stats.temp = weatherdevice.Temp
+  }
 
-*/
+  return stats;
 }
 
 // Extracts the power data from the json 
