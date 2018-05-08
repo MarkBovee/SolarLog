@@ -1,11 +1,10 @@
 html {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode";
   font-size: 80%;
 }
 
 body {
   background-color: #ddd;
+  font-size: 1.1rem
 }
 
 #container {

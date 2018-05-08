@@ -2,7 +2,7 @@
 var domoticz = { 
     server: "84.84.4.7",
     port: "8080",
-    auth: "c29sYXI6cG93ZXI=",
+    auth: "c29sYXI6Qlc2S0ZBTjhjdmZidmFVNQ==",
     devices: {
         // The idx of smart meter devices
         solar: 6,
