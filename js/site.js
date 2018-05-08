@@ -17,7 +17,7 @@ $(window).on("load", function() {
   }, 300000);
 
   function setDate() {
-    $("#date").text(moment(new Date()).format('MM-DD-YYYY'));
+    $("#date").text(moment(new Date()).format('MMMM Do YYYY'));
   }
   
 });

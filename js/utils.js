@@ -46,8 +46,7 @@ function renderChart(data, labels, caption, primary, secondary, element, update)
   if (update) {
     // update the chart data
     var chart = charts[caption];
-    chart.config.data.labels = labels;
-    chart.data = chartdata;
+    chart.config.data = chartdata;
     chart.update();
   } else {
     // draw new chart
