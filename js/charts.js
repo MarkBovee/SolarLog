@@ -154,31 +154,33 @@ function extractPowerData(json) {
     total_usage: 0,
   }
 
-  for (var i = 125; i < json.result.length; i++) {
+  for (var i = 0; i < json.result.length; i++) {
 
     var datapart = json.result[i];
     var time = extractTime(datapart.d);
     var current = 0;
     
-    data.time.push(time);
+    if (time) {
+      data.time.push(time);
 
-    // Usage
-    var usagevalue = 0;
-    if ((datapart.v && datapart.v > 0) || (datapart.v2 && datapart.v2 > 0)) {
-      usagevalue = parseInt(datapart.v) + parseInt(datapart.v2);
-      data.total_usage = (parseInt(datapart.eu) / 1000);
-    }
-    data.usage.push(usagevalue);
-    data.current_usage = usagevalue;
+      // Usage
+      var usagevalue = 0;
+      if ((datapart.v && datapart.v > 0) || (datapart.v2 && datapart.v2 > 0)) {
+        usagevalue = parseInt(datapart.v) + parseInt(datapart.v2);
+        data.total_usage = (parseInt(datapart.eu) / 1000);
+      }
+      data.usage.push(usagevalue);
+      data.current_usage = usagevalue;
 
-    // Return 
-    var returnvalue = 0;
-    if ((datapart.r1 && datapart.r1 > 0) || (datapart.r2 && datapart.r2 > 0)) {
-      returnvalue = parseInt(datapart.r1) + parseInt(datapart.r2)
-      data.total_return = (parseInt(datapart.eg) / 1000);
+      // Return 
+      var returnvalue = 0;
+      if ((datapart.r1 && datapart.r1 > 0) || (datapart.r2 && datapart.r2 > 0)) {
+        returnvalue = parseInt(datapart.r1) + parseInt(datapart.r2)
+        data.total_return = (parseInt(datapart.eg) / 1000);
+      }
+      data.return.push(returnvalue);
+      data.current_return = returnvalue;
     }
-    data.return.push(returnvalue);
-    data.current_return = returnvalue;
   }
 
   return data;
@@ -197,8 +199,10 @@ function extractGasData(json) {
     var datapart = json.result[i];
     var time = extractTime(datapart.d);
     
-    data.time.push(time);
-    data.usage.push(parseFloat(datapart.v));
+    if (time) {
+      data.time.push(time);
+      data.usage.push(parseFloat(datapart.v));
+    }
   }
 
   return data;

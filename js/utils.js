@@ -5,12 +5,17 @@ function extractTime(date) {
   var parts = date.split(" ");
 
   if (parts.length > 1) {
+    var date = parts[0];
     var time = parts[1];
 
-    return time;
+    var today = moment(new Date()).format('YYYY-MM-DD')
+
+    if (date == today) {
+      return time;
+    }
   }
 
-  return "";
+  return null;
 }
 
 // creates the hex code from rgba
