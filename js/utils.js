@@ -18,6 +18,22 @@ function extractTime(date) {
   return null;
 }
 
+// extracts the formatted date part of the date string
+function extractDate(date) {
+  var parts = date.split("-");
+
+  if (parts.length > 2) {
+    var year = parts[0];
+    var month = parts[1];
+    var day = parts[2];
+
+    return day + "-" + month
+  }
+
+  return null;
+}
+
+
 // creates the hex code from rgba
 function rgb (r, g, b) {
 

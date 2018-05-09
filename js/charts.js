@@ -97,7 +97,6 @@ function renderGasDay(data, update) {
   renderLineChart("Gas", "gaschart", chartdata, update, 0.25);
 }
 
-
 // draws the gas values of last week
 function renderGasWeek(data, update) {
 
@@ -200,7 +199,7 @@ function extractPowerWeekData(json) {
   for (var i = 0; i < json.result.length; i++) {
     var datapart = json.result[i];
 
-    data.dates.push(datapart.d);
+    data.dates.push(extractDate(datapart.d));
     data.usage.push(parseFloat(datapart.v) + parseFloat(datapart.v2));
     data.return.push(parseFloat(datapart.r1) + parseFloat(datapart.r2));
   }
@@ -240,7 +239,7 @@ function extractGasWeekData(json) {
   for (var i = 0; i < json.result.length; i++) {
     var datapart = json.result[i];
 
-    data.dates.push(datapart.d);
+    data.dates.push(extractDate(datapart.d));
     data.usage.push(parseFloat(datapart.v));
   }
 
