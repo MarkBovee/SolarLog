@@ -32,7 +32,7 @@ function rgb (r, g, b) {
 }
 
 // renders a line chart
-function renderLineChart(caption, element, chartdata, update) {
+function renderLineChart(caption, element, chartdata, update, max) {
   if (update) {
     // update the chart data
     var chart = charts[caption];
@@ -71,6 +71,12 @@ function renderLineChart(caption, element, chartdata, update) {
         }
       }
     };
+
+    if (max) {
+      options.options.scales.yAxes[0].ticks = {
+        max: max
+      }
+    }
 
     var ctx = document.getElementById(element).getContext("2d");
     charts[caption] = new Chart(ctx, options);
