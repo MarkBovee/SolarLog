@@ -1,49 +1,52 @@
-// Gets the power data from domoticz
+// Gets the data from domoticz
+function getDomoticzData(idx, range, callback) {
+  jQuery.ajax({
+    headers: {
+      "Authorization": "Basic " + domoticz.auth
+    },
+    url: "https://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + idx + "&range=" + range,
+    type: "GET",
+    contentType: "application/json; charset=utf-8",
+    success: function(json) {
+      callback(json);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+    }
+  });
+}
+
+// Gets the power data for today
 function getPowerDataDay(update) {
-  jQuery.ajax({
-    headers: {
-      "Authorization": "Basic " + domoticz.auth
-    },
-    url: "https://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + domoticz.devices.solar + "&range=day",
-    type: "GET",
-    contentType: "application/json; charset=utf-8",
-    success: function(json) {
-      var powerdata = extractPowerData(json);
-      renderPowerDay(powerdata, update);
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-    }
+  getDomoticzData(domoticz.devices.solar, "day", function(json) {
+    var powerdata = extractPowerData(json);
+    renderPowerDay(powerdata, update);
   });
 }
 
-// Gets the gas data from domoticz
+// Gets the gas data for today
 function getGasDataDay(update) {
-  jQuery.ajax({
-    headers: {
-      "Authorization": "Basic " + domoticz.auth
-    },
-    url: "https://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + domoticz.devices.gas + "&range=day",
-    type: "GET",
-    contentType: "application/json; charset=utf-8",
-    success: function(json) {
-      var gasdata = extractGasData(json);
-      renderGasDay(gasdata, update);
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-    }
+  getDomoticzData(domoticz.devices.gas, "day", function(json) {
+    var gasdata = extractGasData(json);
+    renderGasDay(gasdata, update);
   });
-}
-
-// gets the gas data from domoticz
-function getGasDataWeek(update) {
-  renderGasWeek([], update)
 }
 
 // gets the power data of last week from domoticz
 function getPowerDataWeek(update) {
-  renderPowerWeek([], update);
+  getDomoticzData(domoticz.devices.solar, "week", function(json) {
+    var powerdata = extractPowerWeekData(json);
+    renderPowerWeek(powerdata, update);
+  });
+  
+}
+
+// gets the gas data from domoticz
+function getGasDataWeek(update) {
+  getDomoticzData(domoticz.devices.gas, "week", function(json) {
+    var gasdata = extractGasWeekData(json);
+    renderGasWeek(gasdata, update)
+  });
 }
 
 // Draw a chart for the power values of today
@@ -99,11 +102,11 @@ function renderGasDay(data, update) {
 function renderGasWeek(data, update) {
 
   var chartdata = {
-    labels: ["Ma", "Di"],
+    labels: data.dates,
     datasets: [
       {
         label: "Gas",
-        data: [50 , 30 ],
+        data: data.usage,
         borderColor: colors.gas.primary,
         borderWidth: 2,
         backgroundColor: colors.gas.secondary, 
@@ -118,18 +121,18 @@ function renderGasWeek(data, update) {
 function renderPowerWeek(data, update) {
 
   var chartdata = {
-    labels: ["Ma", "Di"],
+    labels: data.dates,
     datasets: [
       {
         label: "Usage",
-        data: [50 , 30 ],
+        data: data.usage,
         borderColor: colors.usage.primary,
         borderWidth: 2,
         backgroundColor: colors.usage.secondary, 
       },
       {
         label: "Return",
-        data: [150 , 130 ],
+        data: data.return,
         borderColor: colors.return.primary,
         borderWidth: 2,
         backgroundColor: colors.return.secondary, 
@@ -142,7 +145,6 @@ function renderPowerWeek(data, update) {
 
 // Extracts the power data from the json 
 function extractPowerData(json) {
-
   // Create the power data object
   var data = {
     time: [],
@@ -186,9 +188,28 @@ function extractPowerData(json) {
   return data;
 }
 
+// Extracts the power week data from the json 
+function extractPowerWeekData(json) {
+  // Create the gas data object
+  var data = {
+    dates: [],
+    usage: [],
+    return: []
+  }
+
+  for (var i = 0; i < json.result.length; i++) {
+    var datapart = json.result[i];
+
+    data.dates.push(datapart.d);
+    data.usage.push(parseFloat(datapart.v) + parseFloat(datapart.v2));
+    data.return.push(parseFloat(datapart.r1) + parseFloat(datapart.r2));
+  }
+
+  return data;
+}
+
 // Extracts the gas data from the json 
 function extractGasData(json) {
-
   // Create the gas data object
   var data = {
     time: [],
@@ -207,3 +228,22 @@ function extractGasData(json) {
 
   return data;
 }
+
+// Extracts the power week data from the json 
+function extractGasWeekData(json) {
+  // Create the gas data object
+  var data = {
+    dates: [],
+    usage: []
+  }
+
+  for (var i = 0; i < json.result.length; i++) {
+    var datapart = json.result[i];
+
+    data.dates.push(datapart.d);
+    data.usage.push(parseFloat(datapart.v));
+  }
+
+  return data;
+}
+

@@ -56,7 +56,7 @@ function renderLineChart(caption, element, chartdata, update, max) {
               },
               ticks: {
                 autoSkip: true,
-                maxTicksLimit: 5,
+                maxTicksLimit: 6,
                 maxRotation: 0
               }
             }
@@ -103,7 +103,7 @@ function renderBarChart(caption, element, chartdata, update) {
         scales: {
             xAxes: [
               {
-                stacked: true,
+                stacked: false,
                 gridLines: {
                   display: false
                 }
