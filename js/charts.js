@@ -91,7 +91,7 @@ function renderGasDay(data, update) {
     ]
   };
 
-  renderLineChart("Gas", "gaschart", chartdata, update, 1);
+  renderLineChart("Gas", "gaschart", chartdata, update, 0.25);
 }
 
 
