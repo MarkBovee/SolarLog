@@ -3,9 +3,10 @@ $(window).on("load", function() {
   // load the initial data
   setDate();
   getStatsData();
-  getPowerDataCurrent(false);
-  getPowerDataLastWeek(false);
-  getGasDataLastWeek(false);
+  getPowerDataDay(false);
+  getPowerDataWeek(false);
+  getGasDataDay(false);
+  getGasDataWeek(false);
 
   // refresh chart data every 15 seconds
   window.setInterval(function() {
@@ -15,7 +16,10 @@ $(window).on("load", function() {
   // refresh chart data every 5 minutes
   window.setInterval(function() {
     setDate();
-    getPowerDataCurrent(true);
+    getPowerDataDay(true);
+    getPowerDataWeek(true);
+    getGasDataDay(true);
+    getGasDataWeek(true);
   }, 300000);
 
   function setDate() {

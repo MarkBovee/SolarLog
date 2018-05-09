@@ -1,5 +1,5 @@
-// gets the power data from domoticz
-function getPowerDataCurrent(update) {
+// Gets the power data from domoticz
+function getPowerDataDay(update) {
   jQuery.ajax({
     headers: {
       "Authorization": "Basic " + domoticz.auth
@@ -8,8 +8,27 @@ function getPowerDataCurrent(update) {
     type: "GET",
     contentType: "application/json; charset=utf-8",
     success: function(json) {
-      solardata = extractPowerChartData(json);
-      renderPowerChart(solardata, update);
+      var powerdata = extractPowerData(json);
+      renderPowerDay(powerdata, update);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+    }
+  });
+}
+
+// Gets the gas data from domoticz
+function getGasDataDay(update) {
+  jQuery.ajax({
+    headers: {
+      "Authorization": "Basic " + domoticz.auth
+    },
+    url: "https://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + domoticz.devices.gas + "&range=day",
+    type: "GET",
+    contentType: "application/json; charset=utf-8",
+    success: function(json) {
+      var gasdata = extractGasData(json);
+      renderGasDay(gasdata, update);
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log(jqXHR);
@@ -18,17 +37,17 @@ function getPowerDataCurrent(update) {
 }
 
 // gets the gas data from domoticz
-function getGasDataLastWeek(update) {
-  renderGasLastWeek([], update)
+function getGasDataWeek(update) {
+  renderGasWeek([], update)
 }
 
 // gets the power data of last week from domoticz
-function getPowerDataLastWeek(update) {
-  renderPowerLastWeek([], update);
+function getPowerDataWeek(update) {
+  renderPowerWeek([], update);
 }
 
-// draw a chart for the power values
-function renderPowerChart(data, update) {
+// Draw a chart for the power values of today
+function renderPowerDay(data, update) {
 
   var chartdata = {
     labels: data.time,
@@ -55,8 +74,29 @@ function renderPowerChart(data, update) {
   renderLineChart("Power", "powerchart", chartdata, update);
 }
 
+// Draw a chart for the gas values of today
+function renderGasDay(data, update) {
+
+  var chartdata = {
+    labels: data.time,
+    datasets: [
+      {
+        label: "Usage",
+        data: data.usage,
+        pointRadius: 0,
+        borderColor: colors.gas.primary,
+        borderWidth: 2,
+        backgroundColor: colors.gas.secondary 
+      }
+    ]
+  };
+
+  renderLineChart("Gas", "gaschart", chartdata, update);
+}
+
+
 // draws the gas values of last week
-function renderGasLastWeek(data, update) {
+function renderGasWeek(data, update) {
 
   var chartdata = {
     labels: ["Ma", "Di"],
@@ -75,7 +115,7 @@ function renderGasLastWeek(data, update) {
 }
 
 // draws the values of last week
-function renderPowerLastWeek(data, update) {
+function renderPowerWeek(data, update) {
 
   var chartdata = {
     labels: ["Ma", "Di"],
@@ -101,7 +141,7 @@ function renderPowerLastWeek(data, update) {
 }
 
 // Extracts the power data from the json 
-function extractPowerChartData(json) {
+function extractPowerData(json) {
 
   // Create the power data object
   var data = {
@@ -139,6 +179,26 @@ function extractPowerChartData(json) {
     }
     data.return.push(returnvalue);
     data.current_return = returnvalue;
+  }
+
+  return data;
+}
+
+// Extracts the gas data from the json 
+function extractGasData(json) {
+
+  // Create the gas data object
+  var data = {
+    time: [],
+    usage: [],
+  }
+
+  for (var i = 0; i < json.result.length; i++) {
+    var datapart = json.result[i];
+    var time = extractTime(datapart.d);
+    
+    data.time.push(time);
+    data.usage.push(parseFloat(datapart.v));
   }
 
   return data;
