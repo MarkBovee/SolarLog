@@ -40,6 +40,7 @@ function renderStats(data) {
     }
     if (data.forecast && data.temp) {
       $("#weather").html(data.forecast + " " + data.temp + "&#8451;");
+      $("#weathericon").attr("src", "img/" + data.forecast + ".png");
     }
   }
 }
