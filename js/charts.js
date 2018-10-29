@@ -94,7 +94,7 @@ function renderGasDay(data, update) {
     ]
   };
 
-  renderLineChart("Gas", "gaschart", chartdata, update, 0.25);
+  renderLineChart("Gas", "gaschart", chartdata, update, 0.5);
 }
 
 // draws the gas values of last week
