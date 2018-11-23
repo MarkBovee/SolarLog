@@ -4,7 +4,7 @@ function getDomoticzData(idx, range, callback) {
     headers: {
       "Authorization": "Basic " + domoticz.auth
     },
-    url: "https://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + idx + "&range=" + range,
+    url: "http://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=graph&sensor=counter&idx=" + idx + "&range=" + range,
     type: "GET",
     contentType: "application/json; charset=utf-8",
     success: function(json) {

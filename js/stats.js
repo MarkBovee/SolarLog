@@ -4,7 +4,7 @@ function getStatsData() {
     headers: {
       Authorization: "Basic " + domoticz.auth
     },
-    url: "https://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=devices&filter=all&favorite=1&used=true&order=[Order]&plan=0",
+    url: "http://" + domoticz.server + ":" + domoticz.port + "/json.htm?type=devices&filter=all&favorite=1&used=true&order=[Order]&plan=0",
     type: "GET",
     contentType: "application/json; charset=utf-8",
     success: function(json) {
